@@ -1,49 +1,49 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Graph {
-    int V;
-    int **adj;  // Pointer to a 2D adjacency matrix
+    int V; // Number of vertices
+    vector<vector<int>> adjMatrix; // Adjacency matrix
 
 public:
-    Graph(int a) {
-       V = a;
-        adj = new int*[V];  // Step 1: Create an array of pointers
-
-        for (int i = 0; i < V; i++) {
-            adj[i] = new int[V]{0};  // Step 2: Allocate and initialize each row
-        }
+    // Constructor to initialize the graph with V vertices
+    Graph(int V) {
+        this->V = V;
+        adjMatrix.resize(V, vector<int>(V, 0)); // Initialize V x V matrix with 0
     }
 
+    // Function to add an edge from vertex u to vertex v
     void addEdge(int u, int v) {
-        adj[u][v] = 1;
-        adj[v][u]=1;// Set adjacency matrix value to 1 (directed edge)
+        adjMatrix[u][v] = 1; // Add an edge from u to v
+        adjMatrix[v][u] = 1; // Since it's an undirected graph, also add an edge from v to u
     }
 
-    void display() {
-        for (int i = 0; i < V; i++) {
-            for (int j = 0; j < V; j++) {
-                cout << adj[i][j] << " ";
+    // Function to print the adjacency matrix
+    void printGraph() {
+        for (int i = 0; i < V; ++i) {
+            for (int j = 0; j < V; ++j) {
+                cout << adjMatrix[i][j] << " "; // Print the adjacency matrix
             }
             cout << endl;
         }
     }
-
-    ~Graph() {  // Destructor to free allocated memory
-        for (int i = 0; i < V; i++) {
-            delete[] adj[i];  // Delete each row
-        }
-        delete[] adj;  // Delete row pointers
-    }
 };
 
 int main() {
-    Graph g(3);  // Creates a graph with 3 vertices
+    // Create a graph with 5 vertices
+    Graph g(5);
+
+    // Add edges to the graph
     g.addEdge(0, 1);
+    g.addEdge(0, 4);
     g.addEdge(1, 2);
-    
-    cout << "Adjacency Matrix:\n";
-    g.display();
-    
+    g.addEdge(1, 3);
+    g.addEdge(1, 4);
+    g.addEdge(3, 4);
+
+    // Print the graph's adjacency matrix
+    g.printGraph();
+
     return 0;
 }
