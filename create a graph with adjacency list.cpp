@@ -1,70 +1,49 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-// Node structure for adjacency list
-struct Node {
-    int vertex;
-    Node* next;
-};
-
-// Graph class using adjacency list
 class Graph {
-    int V;
-    Node** adj; // Array of linked lists
+    int V; // Number of vertices
+    vector<vector<int>> adjList; // Adjacency list for the graph
 
 public:
-    Graph(int a) {
-        V = a;
-        adj = new Node*[V];  // Step 1: Create an array of pointers
-
-        for (int i = 0; i < V; i++) {
-            adj[i] = nullptr;  // Initialize each list as empty
-        }
+    Graph(int V) { // Constructor to initialize the graph with V vertices
+        this->V = V;
+        adjList.resize(V); // Resize the adjacency list to hold V vertices
     }
 
-    // Function to add an edge (undirected)
+    // Function to add an edge from vertex u to vertex v
     void addEdge(int u, int v) {
-        Node* newNode1 = new Node{v, adj[u]};
-        adj[u] = newNode1;
-
-        Node* newNode2 = new Node{u, adj[v]};
-        adj[v] = newNode2;
+        adjList[u].push_back(v); // Add v to the adjacency list of u
+        adjList[v].push_back(u); // Since it's an undirected graph, also add u to the adjacency list of v
     }
 
-    // Function to display the adjacency list
-    void display() {
-        for (int i = 0; i < V; i++) {
-            cout << "Vertex " << i << " -> ";
-            Node* temp = adj[i];
-            while (temp != nullptr) {  // Explicitly checking for nullptr
-                cout << temp->vertex << " ";
-                temp = temp->next;
+    // Function to print the adjacency list representation of the graph
+    void printGraph() {
+        for (int i = 0; i < V; ++i) {
+            cout << "Vertex " << i << ": ";
+            for (int v : adjList[i]) {
+                cout << v << " ";
             }
             cout << endl;
         }
     }
-
-    // Destructor to free memory
-    ~Graph() {
-        for (int i = 0; i < V; i++) {
-            Node* temp = adj[i];
-            while (temp != nullptr) {  // Explicitly checking for nullptr
-                Node* toDelete = temp;
-                temp = temp->next;
-                delete toDelete;
-            }
-        }
-        delete[] adj;
-    }
 };
 
 int main() {
-    Graph g(3);  // Creates a graph with 3 vertices
-    g.addEdge(0, 1);
-    g.addEdge(1, 2);
+    // Create a graph with 5 vertices
+    Graph g(5);
 
-    cout << "Adjacency List:\n";
-    g.display();
+    // Add edges
+    g.addEdge(0, 1);
+    g.addEdge(0, 4);
+    g.addEdge(1, 2);
+    g.addEdge(1, 3);
+    g.addEdge(1, 4);
+    g.addEdge(3, 4);
+
+    // Print the graph
+    g.printGraph();
 
     return 0;
 }
